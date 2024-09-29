@@ -1,0 +1,24 @@
+name: Deploy Images to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # 当推送到 main 分支时触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Deploy images
+      run: |
+        mkdir -p docs/images  # 创建 docs/images 文件夹用于 GitHub Pages 部署
+        cp -r images/* docs/images/  # 复制 images 文件夹中的所有图片到 docs/images
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs  # 部署 docs 文件夹内容到 GitHub Pages
